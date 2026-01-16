@@ -12,6 +12,7 @@ import {
   Settings,
   ExternalLink,
 } from "lucide-react";
+import Image from "next/image";
 
 const navigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -29,7 +30,7 @@ export function AdminSidebar() {
       {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 bg-card border-r border-border lg:block">
         <div className="flex h-16 items-center gap-2 px-6 border-b border-border">
-          <Leaf className="h-8 w-8 text-primary" />
+          <Image src="/logo.png" width={40} height={40} alt="Turah Logo" />
           <span className="font-serif text-xl font-bold text-primary">
             Turah Admin
           </span>
