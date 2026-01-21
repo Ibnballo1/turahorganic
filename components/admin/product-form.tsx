@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Upload, X } from "lucide-react";
 import { createProduct, updateProduct } from "@/actions/products";
 import Image from "next/image";
+import { supabase } from "@/lib/supabaseClient";
 
 interface Category {
   id: string;
@@ -58,13 +58,38 @@ export function ProductForm({ categories, product }: ProductFormProps) {
     featured: product?.featured || false,
   });
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // For now, we'll use placeholder URLs
-    // In production, this would upload to Supabase Storage
-    const newImage = `/placeholder.svg?height=400&width=400&query=${encodeURIComponent(
-      formData.name || "product"
-    )}`;
-    setImages([...images, newImage]);
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsLoading(true); // Start loader
+
+    try {
+      // 1. Create a unique file name
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `products/${fileName}`;
+
+      // 2. Upload to Supabase Storage
+      const { error: uploadError, data } = await supabase.storage
+        .from("turah-products-images")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // 3. Get the Public URL
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("turah-products-images").getPublicUrl(filePath);
+
+      // 4. Update the state so the new image shows in the UI
+      setImages((prev) => [...prev, publicUrl]);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Error uploading image. Check bucket permissions.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const removeImage = (index: number) => {
@@ -258,8 +283,9 @@ export function ProductForm({ categories, product }: ProductFormProps) {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleImageUpload}
+                  onChange={handleImageUpload} // Point to the correct handler
                   className="hidden"
+                  disabled={isLoading}
                 />
               </label>
             </div>

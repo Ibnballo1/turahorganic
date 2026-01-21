@@ -40,7 +40,6 @@ export function AboutPreview() {
                 className="object-cover"
               />
             </div>
-            <div className="absolute -bottom-8 -right-8 w-48 h-48 bg-secondary rounded-2xl hidden lg:block" />
           </div>
           <div>
             <p className="text-secondary font-medium mb-2 tracking-wide uppercase text-sm">

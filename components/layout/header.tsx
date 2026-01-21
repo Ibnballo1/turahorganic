@@ -9,6 +9,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useCart } from "@/hooks/use-cart";
+import Image from "next/image";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -26,7 +27,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <Leaf className="h-8 w-8 text-primary" />
+          <Image src="/logo.png" width={40} height={40} alt="Turah Logo" />
           <span className="font-serif text-xl font-bold text-primary">
             Turah Organics
           </span>

@@ -24,6 +24,7 @@ import {
   ShoppingCart,
   Settings,
 } from "lucide-react";
+import Image from "next/image";
 
 interface AdminHeaderProps {
   user: {
@@ -69,7 +70,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
           <div className="flex h-16 items-center gap-2 px-6 border-b border-border">
-            <Leaf className="h-8 w-8 text-primary" />
+            <Image src="/logo.png" width={40} height={40} alt="Turah Logo" />
             <span className="font-serif text-xl font-bold text-primary">
               Turah Admin
             </span>

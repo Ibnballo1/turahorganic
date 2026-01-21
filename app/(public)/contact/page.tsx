@@ -16,7 +16,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Call Us",
-    details: ["+234 XXX XXX XXXX", "+234 XXX XXX XXXX"],
+    details: ["+234 903 681 6382", "+234 817 435 5135"],
   },
   {
     icon: Mail,

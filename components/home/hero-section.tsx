@@ -17,9 +17,6 @@ export function HeroSection() {
       </div>
       <div className="container mx-auto px-4 py-24 relative z-10">
         <div className="max-w-3xl">
-          <p className="text-secondary font-medium mb-4 tracking-wide uppercase text-sm">
-            Handcrafted in Nigeria
-          </p>
           <h1 className="font-serif text-5xl md:text-7xl font-bold text-foreground leading-tight mb-6">
             Natural beauty,{" "}
             <span className="text-primary">rooted in tradition</span>

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const footerLinks = {
   shop: [
@@ -37,7 +38,13 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <Leaf className="h-8 w-8" />
+              <Image
+                src="/logo.png"
+                width={40}
+                height={40}
+                alt="Turah Logo"
+                className="bg-white"
+              />
               <span className="font-serif text-xl font-bold">
                 Turah Organics
               </span>
@@ -133,7 +140,7 @@ export function Footer() {
                 <MapPin className="h-4 w-4" /> Lagos, Nigeria
               </span>
               <span className="flex items-center gap-1">
-                <Phone className="h-4 w-4" /> +234 XXX XXX XXXX
+                <Phone className="h-4 w-4" /> +234 903 681 6382
               </span>
               <span className="flex items-center gap-1">
                 <Mail className="h-4 w-4" /> hello@turahorganics.com
