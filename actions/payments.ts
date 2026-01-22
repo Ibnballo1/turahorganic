@@ -65,7 +65,7 @@ export async function initiatePayment(data: PaymentData) {
         unitPrice: String(item.price),
         totalPrice: String(item.price * item.quantity),
         quantity: item.quantity,
-      }))
+      })),
     );
 
     // Initialize Paystack transaction
@@ -88,7 +88,7 @@ export async function initiatePayment(data: PaymentData) {
             customerPhone: data.customerPhone,
           },
         }),
-      }
+      },
     );
 
     const result = await response.json();
@@ -123,7 +123,7 @@ export async function verifyPayment(reference: string) {
         headers: {
           Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
         },
-      }
+      },
     );
 
     const result = await response.json();
@@ -132,9 +132,10 @@ export async function verifyPayment(reference: string) {
       return { success: false, error: result.message };
     }
 
-    const { status: transactionStatus, metadata } = result.data;
+    const { status: transactionStatus, reference: paystackRef } = result.data;
 
     if (transactionStatus === "success") {
+      const orderId = paystackRef;
       // Update order payment status
       await db
         .update(orders)
@@ -143,18 +144,18 @@ export async function verifyPayment(reference: string) {
           orderStatus: "processing",
           updatedAt: new Date(),
         })
-        .where(eq(orders.id, metadata.orderId));
+        .where(eq(orders.id, orderId));
 
       // Get order details for email
       const [order] = await db
         .select()
         .from(orders)
-        .where(eq(orders.id, metadata.orderId))
+        .where(eq(orders.id, orderId))
         .limit(1);
       const items = await db
         .select()
         .from(orderItems)
-        .where(eq(orderItems.orderId, metadata.orderId));
+        .where(eq(orderItems.orderId, orderId));
 
       // Send confirmation email
       if (order) {
@@ -183,7 +184,7 @@ export async function verifyPayment(reference: string) {
         });
       }
 
-      return { success: true, orderId: metadata.orderId };
+      return { success: true, orderId: orderId };
     }
 
     return { success: false, error: "Payment was not successful" };

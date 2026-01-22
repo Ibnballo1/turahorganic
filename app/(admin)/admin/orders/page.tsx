@@ -59,7 +59,7 @@ export default async function OrdersPage() {
         <div className="space-y-4">
           {allOrders.map((order) => (
             <Link key={order.id} href={`/admin/orders/${order.id}`}>
-              <Card className="border-border hover:shadow-md transition-shadow cursor-pointer">
+              <Card className="border-border hover:shadow-md transition-shadow cursor-pointer mb-4">
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
