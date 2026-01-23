@@ -15,7 +15,7 @@ export function HeroSection() {
           priority
         />
       </div>
-      <div className="container mx-auto px-4 py-24 relative z-10">
+      <div className="container mx-auto md:mx-20 px-4 py-24 relative z-10">
         <div className="max-w-3xl">
           <h1 className="font-serif text-5xl md:text-7xl font-bold text-foreground leading-tight mb-6">
             Natural beauty,{" "}

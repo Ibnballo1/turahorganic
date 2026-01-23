@@ -1,39 +1,13 @@
-import { db } from "@/lib/db";
-import { categories, products } from "@/lib/db/schema";
-import { eq, count } from "drizzle-orm";
+import { getAllCategories } from "@/actions/categories"; // Import your central action
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FolderTree, Package } from "lucide-react";
 import { AddCategoryDialog } from "@/components/admin/add-category-dialog";
-
-async function getCategoriesWithCounts() {
-  try {
-    const allCategories = await db
-      .select()
-      .from(categories)
-      .orderBy(categories.name);
-
-    const categoriesWithCounts = await Promise.all(
-      allCategories.map(async (category) => {
-        const [productCount] = await db
-          .select({ count: count() })
-          .from(products)
-          .where(eq(products.categoryId, category.id));
-        return {
-          ...category,
-          productCount: productCount?.count || 0,
-        };
-      })
-    );
-
-    return categoriesWithCounts;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return [];
-  }
-}
+import { EditCategoryDialog } from "@/components/admin/edit-category-dialog";
+import { DeleteCategoryButton } from "@/components/admin/delete-category-button";
 
 export default async function CategoriesPage() {
-  const allCategories = await getCategoriesWithCounts();
+  // Use the action directly
+  const allCategories = await getAllCategories();
 
   return (
     <div className="space-y-6">
@@ -64,10 +38,15 @@ export default async function CategoriesPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {allCategories.map((category) => (
             <Card key={category.id} className="border-border">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-2 flex items-center justify-between">
                 <CardTitle className="font-serif text-xl">
                   {category.name}
                 </CardTitle>
+                <div className="flex items-center gap-2">
+                  {/* Pass the category object directly to the Edit dialog */}
+                  <EditCategoryDialog category={category} />
+                  <DeleteCategoryButton id={category.id} name={category.name} />
+                </div>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
