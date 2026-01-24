@@ -54,20 +54,28 @@ export async function CategoriesSection() {
             <Link
               key={category.slug}
               href={`/products?category=${category.slug}`}
-              className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:shadow-xl transition-all duration-300"
+              className="group relative block overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:shadow-xl"
             >
-              <Card
-                key={category.id}
-                className="border-border shadow-sm hover:shadow-md transition-shadow flex flex-col"
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-4">
-                    {/* Left Side: Title & Count */}
+              <Card className="relative flex aspect-square flex-col justify-end overflow-hidden border-none">
+                {/* 1. Background Image */}
+                <Image
+                  src={category.image || "/placeholder.svg"}
+                  alt={category.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+
+                {/* 2. Gradient Overlay for Text Readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
+
+                {/* 3. Content Layer (Above the image and gradient) */}
+                <div className="relative z-20 p-6 text-white w-full">
+                  <div className="flex items-start justify-between gap-4 mb-2">
                     <div className="space-y-1">
-                      <CardTitle className="font-serif text-xl leading-tight">
+                      <h3 className="font-serif text-2xl font-bold leading-tight">
                         {category.name}
-                      </CardTitle>
-                      <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      </h3>
+                      <div className="flex items-center gap-1.5 text-xs font-medium text-white/80 uppercase tracking-wider">
                         <Package className="h-3.5 w-3.5" />
                         <span>
                           {category.productCount}{" "}
@@ -76,12 +84,14 @@ export async function CategoriesSection() {
                       </div>
                     </div>
 
-                    {/* Right Side: Actions in a Row */}
+                    {/* Admin Actions - Using stopPropagation to prevent Link click */}
                     {userIsTurah?.user?.name === "Turah" && (
-                      <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border/50">
+                      <div
+                        className="flex items-center gap-1 bg-white/10 backdrop-blur-md p-1 rounded-lg border border-white/20"
+                        onClick={(e) => e.preventDefault()} // Prevents the link from firing when clicking buttons
+                      >
                         <EditCategoryDialog category={category} />
-                        <div className="w-px h-4 bg-border mx-0.5" />{" "}
-                        {/* Small Separator */}
+                        <div className="w-px h-4 bg-white/20 mx-0.5" />
                         <DeleteCategoryButton
                           id={category.id}
                           name={category.name}
@@ -89,20 +99,14 @@ export async function CategoriesSection() {
                       </div>
                     )}
                   </div>
-                </CardHeader>
 
-                <CardContent className="grow">
-                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                    {category.description ||
-                      "No description provided for this category."}
+                  <p className="text-sm text-white/90 leading-relaxed line-clamp-2">
+                    {category.description || "No description provided."}
                   </p>
-                </CardContent>
 
-                {/* Visual Footer showing Last Updated */}
-                <div className="px-6 py-3 bg-muted/30 border-t border-border/40 mt-auto">
-                  <p className="text-[10px] text-muted-foreground/60 uppercase font-semibold">
+                  <div className="mt-4 flex items-center text-[10px] text-white/60 uppercase font-semibold tracking-widest">
                     Last Updated: {new Date().toLocaleDateString()}
-                  </p>
+                  </div>
                 </div>
               </Card>
             </Link>
